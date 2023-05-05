@@ -1,0 +1,35 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+metadata:
+  name: ai-n-service
+build:
+  local:
+    concurrency: 1
+  artifacts:
+    - image: &ai-n-service-artifact-image gcr.io/{REPLACE_YOUR_REPO}/ai-hackathon/ai-n-service
+      context: ./ai-n-service
+
+deploy:
+  statusCheckDeadlineSeconds: 670 # because default 120 was too short for prod
+
+  helm:
+    flags:
+      install:
+        - "--atomic=true" #automatically perform rollback
+      upgrade:
+        - "--atomic=true" #automatically perform rollback
+
+    releases:
+      - name: ai-n-service
+        chartPath: ./ai-n-service/charts
+        artifactOverrides:
+          image: *ai-n-service-artifact-image
+        valuesFiles:
+          - ./ai-n-service/charts/values.yaml
+
+# profiles: #this allows to overide above configurations
+#   - name: "dev-infra-values" # Generaly, you don't activate this profile with the -p flag as it is an implementation detail of the ENVIRONMENT_TYPE variable
+#     activation:
+#       - env: "ENVIRONMENT_TYPE=dev"
+#       - env: "ENVIRONMENT_TYPE="
+#     patches:

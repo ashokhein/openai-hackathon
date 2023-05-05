@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &ai-n-service ai-n-service
+  labels:
+    app: *ai-n-service
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: *ai-n-service
+  strategy:
+    type: RollingUpdate 
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: *ai-n-service
+    spec:
+      serviceAccountName: {{ .Values.serviceAccounts.gke }}
+      containers:
+        - image: {{ .Values.image }}
+          name: openai-node-container
+          env:
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: *ai-n-service
+                key: openai-api-key
+          - name: OPENAI_ORG_ID
+            valueFrom:
+              secretKeyRef:
+                name: *ai-n-service
+                key: openai-org-id
+          - name: NODE_ENV
+            value: production
+          - name: PORT
+            value: "8080"                           
+          resources:
+            requests:
+              cpu: 200m
+              memory: 400Mi
+            limits:
+              cpu: 400m
+              memory: 800Mi
+          ports:
+            - name: api
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /healthcheck
+              port: api
+            timeoutSeconds: 3
+            failureThreshold: 2
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /healthcheck
+              port: api
+            timeoutSeconds: 3
+            failureThreshold: 5
+            periodSeconds: 10

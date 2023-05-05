@@ -1,0 +1,3 @@
+serviceAccounts:
+  gke: XXX
+replicas: 1

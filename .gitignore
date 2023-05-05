@@ -1,0 +1,102 @@
+### Terraform ###
+terraform/.terraform/*
+
+### Vim ###
+*.sw?
+
+### Project ###
+logs
+/RUNNING_PID
+target
+build-products
+.cache-main
+.cache-tests
+
+### Idea ###
+.idea
+.idea_modules
+*.iml
+
+### Eclipse ###
+.classpath
+.project
+.settings
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+
+### Java ###
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Plugin-specific files: ###
+
+# IntelliJ
+/out/
+
+# sbt-idea plugin
+.idea_modules/
+
+### Bash ###
+*.sh
+!dorelease.sh
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+*/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+.next/
+/out/
+
+# production
+/build
+*/dist
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+report.*
+
+.next
+
+sw.js
+workbox-*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
